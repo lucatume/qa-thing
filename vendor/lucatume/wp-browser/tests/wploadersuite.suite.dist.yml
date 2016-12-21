@@ -1,0 +1,26 @@
+class_name: WploaderTester
+modules:
+    enabled:
+        - \Helper\Wploadersuite
+        - WPLoader
+    config:
+        WPLoader:
+            wpRootFolder: "/tmp/wordpress"
+            dbName: "wploader"
+            dbHost: "localhost"
+            dbUser: root
+            dbPassword: ''
+            wpDebug: true
+            dbCharset: "utf8"
+            dbCollate: ""
+            tablePrefix: "wp_"
+            domain: "wordpress.dev"
+            adminEmail: "admin@wordpress.dev"
+            title: "Test"
+            phpBinary: "php"
+            language: ""
+            configFile: ""
+            theme: dummy
+            plugins: ['mu-plugin-1/plugin.php']
+            activatePlugins: ['mu-plugin-1/plugin.php']
+            booststrapActions: []

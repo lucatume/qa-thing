@@ -1,0 +1,39 @@
+{
+  "name": "lucatume/qa-thing",
+  "description": "WordPress QA setup for the world.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Luca Tumedei",
+      "email": "luca@theaveragedev.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-0": {
+      "qa_": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.2",
+    "xrstf/composer-php52": "1.*",
+    "lucatume/di52": "^1.4.3",
+    "xamin/handlebars.php": "dev-php-52"
+  },
+  "require-dev": {
+    "lucatume/wp-browser": "^1.19.5"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "xrstf\\Composer52\\Generator::onPostInstallCmd"
+    ],
+    "post-update-cmd": [
+      "xrstf\\Composer52\\Generator::onPostInstallCmd"
+    ],
+    "post-autoload-dump": [
+      "xrstf\\Composer52\\Generator::onPostInstallCmd"
+    ]
+  }
+}
+

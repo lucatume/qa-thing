@@ -1,0 +1,8 @@
+{
+  "issues": {
+    "33445": {
+      "title": "Example",
+      "target": "qa/scripts/example.php"
+    }
+  }
+}

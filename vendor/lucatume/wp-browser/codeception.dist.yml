@@ -1,0 +1,23 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    helpers: tests/_support
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+extensions:
+    enabled:
+        - Codeception\Extension\Phantoman
+        - tad\WPBrowser\Extension\Copier
+    config:
+        Codeception\Extension\Phantoman:
+            path: 'phantomjsbin'
+            port: 4444
+            suites: ['phantomjs']
+        tad\WPBrowser\Extension\Copier:
+            files:
+               'tests/_data/themes/dummy': '/tmp/wordpress/wp-content/themes/dummy'
+               'tests/_data/plugins/mu-plugin-1': '/tmp/wordpress/wp-content/plugins/mu-plugin-1'
