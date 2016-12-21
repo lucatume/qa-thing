@@ -46,7 +46,19 @@ class qa_Issues_ConfigurationApplication implements qa_Interfaces_IssueConfigura
 		$this->option       = 'qa-status-' . $config->getId();
 		$this->outputOption = 'qa-output-' . $config->getId();
 
-		if ( $this->getStatus() !== 'applying' && $this->getStatus() !== 'done' ) {
+		$status = $this->getStatus();
+
+		if ( $status === 'done' ) {
+			$response = new WP_REST_Response( $this->getOutput() );
+			$response->header( 'X-IC-CancelPolling', 'true' );
+
+			delete_transient( $this->option );
+			delete_transient( $this->outputOption );
+
+			return $response;
+		}
+
+		if ( $status !== 'applying' ) {
 			try {
 				$plugin = $config->getPlugin();
 				$script = dirname( WP_PLUGIN_DIR . '/' . $plugin['file'] ) . '/' . $config->getTarget();
@@ -70,11 +82,13 @@ class qa_Issues_ConfigurationApplication implements qa_Interfaces_IssueConfigura
 
 				/** @var \wpdb $wpdb */
 				global $wpdb;
+				/** @noinspection PhpParamsInspection */
 				mysqli_close( $wpdb->dbh );
 
 				if ( $pid === 0 ) {
 					$wpdb->__construct( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST );
 
+					/** @noinspection PhpUnusedLocalVariableInspection */
 					$messages = new qa_Utils_Messages( $this->outputOption, $this->formatter );
 					include $script;
 
@@ -85,41 +99,26 @@ class qa_Issues_ConfigurationApplication implements qa_Interfaces_IssueConfigura
 					$wpdb->__construct( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST );
 				}
 			} catch ( Exception $e ) {
-				$message = sprintf( __( 'The script [%1$s] generated errors: ', 'qa' ), $script ) . '<pre><code>' . $e->getMessage()
-				           . '</code></pre>';
-				$message = $this->formatter->formatError( $message );
+				$lines = array();
+				/** @noinspection PhpUndefinedVariableInspection */
+				$lines[] = sprintf( __( 'The script [%1$s] generated errors: ', 'qa' ), $script );
+				$lines   = array_merge( $lines, explode( PHP_EOL, $e->getMessage() ) );
+				$lines[] = 'File: ' . $e->getFile();
+				$lines[] = 'Line: ' . $e->getLine();
+
+				$this->setOutput( $this->formatter->formatError( $lines ) );
 
 				$this->setStatus( 'done' );
-
-				$response = new WP_REST_Response( $message );
-				$response->header( 'X-IC-CancelPolling', 'true' );
-
-				return $response;
 			}
-
-			$response = new WP_REST_Response( $this->getOutput() );
-			$response->header( 'X-IC-ResumePolling', 'true' );
-
-			return $response;
-		} elseif ( $this->getStatus() === 'done' ) {
-			$response = new WP_REST_Response( $this->getOutput() );
-			$response->header( 'X-IC-CancelPolling', 'true' );
-
-			delete_transient( $this->option );
-			delete_transient( $this->outputOption );
-
-			return $response;
 		}
 
-		return new WP_REST_Response( $this->getOutput() );
+		$response = new WP_REST_Response( $this->getOutput() );
+
+		return $response;
 	}
 
 	protected function getStatus() {
 		return get_transient( $this->option );
-	}
-
-	protected function setStatus( $status ) {
-		set_transient( $this->option, $status, $this->transientExpiration );
 	}
 
 	/**
@@ -127,5 +126,14 @@ class qa_Issues_ConfigurationApplication implements qa_Interfaces_IssueConfigura
 	 */
 	protected function getOutput() {
 		return implode( PHP_EOL, (array) get_transient( $this->outputOption ) );
+	}
+
+	protected function setStatus( $status ) {
+		set_transient( $this->option, $status, $this->transientExpiration );
+	}
+
+	protected function setOutput( $output ) {
+		$current = $this->getOutput();
+		set_transient( $this->outputOption, $current . $output );
 	}
 }

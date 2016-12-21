@@ -1,8 +1,12 @@
 {
   "issues": {
-    "33445": {
+    "example": {
       "title": "Example",
       "target": "qa/scripts/example.php"
+    },
+    "failing-example": {
+      "title": "Failing Example",
+      "target": "qa/scripts/failing-example.php"
     }
   }
 }

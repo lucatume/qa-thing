@@ -11,7 +11,8 @@ class qa_Configurations_Repository implements qa_Interfaces_IssueConfigsReposito
 	public function getAll() {
 		$plugins = get_plugins();
 
-		$configs = array_merge( array_filter( array_map( array( $this, 'readIssueConfigsFromPlugin' ), array_keys( $plugins ) ) ) );
+		$configs = array_filter( array_map( array( $this, 'readIssueConfigsFromPlugin' ), array_keys( $plugins ) ) );
+		$configs = call_user_func_array( 'array_merge', $configs );
 
 		return array_map( array( $this, 'createIssueConfig' ), $configs );
 	}
@@ -48,7 +49,7 @@ class qa_Configurations_Repository implements qa_Interfaces_IssueConfigsReposito
 			$issue->plugin = $pluginInfo;
 		}
 
-		return reset( $issues );
+		return $issues;
 	}
 
 	protected function validateIssueConfig( stdClass $issueConfig ) {

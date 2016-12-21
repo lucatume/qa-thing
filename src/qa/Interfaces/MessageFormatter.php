@@ -1,11 +1,12 @@
 <?php
 
+
 interface qa_Interfaces_MessageFormatter {
 
 	/**
 	 * Formats a message to render like an error.
 	 *
-	 * @param string $message
+	 * @param string|array $message
 	 *
 	 * @return string
 	 */
@@ -14,7 +15,7 @@ interface qa_Interfaces_MessageFormatter {
 	/**
 	 * Formats a message to render like a success.
 	 *
-	 * @param string $message
+	 * @param string|array $message
 	 *
 	 * @return string
 	 */
@@ -23,7 +24,7 @@ interface qa_Interfaces_MessageFormatter {
 	/**
 	 * Formats a message to render like an information.
 	 *
-	 * @param string $message
+	 * @param string|array $message
 	 *
 	 * @return string
 	 */
@@ -32,7 +33,7 @@ interface qa_Interfaces_MessageFormatter {
 	/**
 	 * Formats a message to render like an notice.
 	 *
-	 * @param string $message
+	 * @param string|array $message
 	 *
 	 * @return string
 	 */
