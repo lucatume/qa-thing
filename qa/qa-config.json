@@ -7,6 +7,10 @@
     "failing-example": {
       "title": "Failing Example",
       "target": "qa/scripts/failing-example.php"
+    },
+    "fatal-example": {
+      "title": "Fatal Error Example",
+      "target": "qa/scripts/fatal-error-example.php"
     }
   }
 }

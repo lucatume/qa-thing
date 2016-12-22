@@ -29,7 +29,9 @@
       padding: 0 .5em;
       margin-right: .5em;
       color: ghostwhite;
-      font-weight: bold; }
+      font-weight: bold;
+      width: 2em;
+      display: inline-block; }
   #qa-work-log .qa-information {
     color: cornflowerblue; }
   #qa-work-log .qa-success {
