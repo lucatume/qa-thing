@@ -2,7 +2,7 @@
 
 *WordPress Quality Assurance (QA) setup for the world in developer-friendly way.*
 
-![QA Selection Screen][doc/images/configuration-apply.gif]
+![QA Selection Screen](doc/images/configuration-apply.gif)
 
 **Still a work in progress: for the time being run `composer update --no-dev` after download to have the plugin work.**
 
