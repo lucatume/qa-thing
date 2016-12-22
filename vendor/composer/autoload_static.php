@@ -284,7 +284,7 @@ class ComposerStaticInit20cae95787a9c35b78b3c423f09d63d5
         array (
             'qa_' => 
             array (
-                0 => __DIR__ . '/../..',
+                0 => __DIR__ . '/../..' . '/src',
             ),
         ),
         'c' => 
