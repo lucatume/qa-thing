@@ -4,10 +4,9 @@
 
 ![QA Selection Screen](doc/images/configuration-apply.gif)
 
-**Still a work in progress: for the time being run `composer update --no-dev` after download to have the plugin work.**
-
 ## Installation
 Download the plugin [from GitHub](https://github.com/lucatume/function-mocker/archive/master.zip), unzip it in the WordPress plugins folder and activate it from the plugins administration panel.
+**Still a work in progress: for the time being run `composer update --no-dev` after download to have the plugin work.**
 
 ## Usage
 
