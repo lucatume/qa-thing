@@ -21,7 +21,7 @@
     "lucatume/di52": "^1.4.3"
   },
   "require-dev": {
-    "lucatume/wp-browser": "^1.19.5"
+    "lucatume/wp-browser": "^1.19"
   },
   "scripts": {
     "post-install-cmd": [
@@ -35,4 +35,3 @@
     ]
   }
 }
-

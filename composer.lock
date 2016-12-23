@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2576d686877ac896e001cf0aac81ffa7",
-    "content-hash": "628dc33c5e575f7171b210f7702ddb12",
+    "hash": "e8e7625cf049df36c8702393256be09d",
+    "content-hash": "84d01762b4ec109bebb1a20b6056e289",
     "packages": [
         {
             "name": "lucatume/di52",
