@@ -18,7 +18,7 @@
   "require": {
     "php": ">=5.2",
     "xrstf/composer-php52": "1.*",
-    "lucatume/di52": "^1.4.3"
+    "lucatume/di52": "^2.0"
   },
   "require-dev": {
     "lucatume/wp-browser": "^1.19"
