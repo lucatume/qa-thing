@@ -1,8 +1,8 @@
 <?php
 $I = new AcceptanceTester( $scenario );
 
-$I->am( 'a QA person' );
-$I->wantTo( 'see plugin provided configurations in the QA options page' );
+$I->am( 'QA person' );
+$I->wantTo( 'see QA plugin provided configurations in the QA options page' );
 
 $I->loginAsAdmin();
 $I->amOnAdminPage( '/admin.php?page=qa-options' );
