@@ -1,13 +1,16 @@
 <?php
 
 
-class PluginConfigurationReadCest {
-	public function _before( AcceptanceTester $I ) {
-		$I->cli('plugin delete acme');
-	}
+use Codeception\Exception\ModuleException;
 
+class PluginConfigurationReadCest {
 	public function _after( AcceptanceTester $I ) {
-		$I->cli('plugin delete acme');
+		try {
+			$I->cli( 'plugin is-installed acme' );
+			$I->cli( 'plugin delete acme' );
+		} catch ( ModuleException $e ) {
+			// not installed
+		}
 	}
 
 	/**
@@ -18,11 +21,15 @@ class PluginConfigurationReadCest {
 		$I->wantTo( 'see a plugin provided configuration' );
 
 		$I->cli( 'scaffold plugin acme' );
+
 		$pluginPath = $I->cli( 'plugin path acme --dir' );
+		$qaFolder = $pluginPath . '/qa';
+		$I->copyDir( codecept_data_dir( 'configurations/one-configuration' ), $qaFolder );
+		$I->seeFileFound( $qaFolder . '/qa-config.json' );
 
-		$destination = $pluginPath . '/qa';
-		$I->copyDir( codecept_data_dir( 'configurations/one-configuration' ), $destination );
+		$I->loginAsAdmin();
+		$I->amOnAdminPage( '/admin.php?page=qa-options' );
 
-		$I->seeFileFound( $destination );
+		$I->canSeeNumberOfElements( '#qa-configuration option', 4 );
 	}
 }

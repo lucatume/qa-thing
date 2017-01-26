@@ -1,5 +1,5 @@
 <?php
 
-interface qa__Options_PageI {
+interface qa_Options_PageI {
 	public function render();
 }
