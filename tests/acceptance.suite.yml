@@ -9,18 +9,12 @@ modules:
     enabled:
         - \Helper\Acceptance
         - WPBrowser
+        - WPCLI
     config:
-        WPDb:
-            dsn: 'mysql:host=localhost;dbname=wp'
-            user: root
-            password: root
-            dump: tests/_data/dump.sql
-            populate: true
-            cleanup: true
-            url: 'http://wp.dev'
-            tablePrefix: wp_
         WPBrowser:
             url: 'http://wp.dev'
             adminUsername: admin
             adminPassword: admin
             adminPath: /wp-admin
+        WPCLI:
+            path: '/Users/Luca/Sites/wp'
