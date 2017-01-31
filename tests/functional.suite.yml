@@ -8,9 +8,10 @@ class_name: FunctionalTester
 modules:
     enabled:
         - \Helper\Functional
-        - Filesystem
         - WPDb
         - WordPress
+        - WPCLI
+        - Filesystem
     config:
         WPDb:
             dsn: 'mysql:host=localhost;dbname=wp'
@@ -26,3 +27,5 @@ modules:
             wpRootFolder: /Users/Luca/Sites/wp
             adminUsername: admin
             adminPassword: admin
+        WPCLI:
+            path: '/Users/Luca/Sites/wp'

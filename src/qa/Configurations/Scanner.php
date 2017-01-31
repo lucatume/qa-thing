@@ -1,7 +1,6 @@
 <?php
 
 class qa_Configurations_Scanner implements qa_Configurations_ScannerI {
-
 	/**
 	 * Returns an array of the available configurations.
 	 *

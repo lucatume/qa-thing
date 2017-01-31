@@ -8,10 +8,7 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - \Helper\Acceptance
-        - WPDb
         - WPBrowser
-        - WPCLI
-        - Filesystem
     config:
         WPDb:
             dsn: 'mysql:host=localhost;dbname=wp'
@@ -27,5 +24,3 @@ modules:
             adminUsername: admin
             adminPassword: admin
             adminPath: /wp-admin
-        WPCLI:
-            path: '/Users/Luca/Sites/wp'
