@@ -13,6 +13,7 @@ include dirname( __FILE__ ) . '/vendor/autoload_52.php';
 
 $container = new tad_DI52_Container();
 
+$container->register('qa_ServiceProviders_Adapters');
 $container->register('qa_ServiceProviders_Configurations');
 $container->register('qa_ServiceProviders_Options');
 

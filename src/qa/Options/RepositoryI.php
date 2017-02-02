@@ -7,4 +7,14 @@ interface qa_Options_RepositoryI {
 	 * @return bool
 	 */
 	public function disableExamples();
+
+	/**
+	 * Updates the option in the database.
+	 */
+	public function update();
+
+	/**
+	 * Reads the option from the database.
+	 */
+	public function read();
 }

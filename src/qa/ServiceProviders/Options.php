@@ -10,7 +10,7 @@ class qa_ServiceProviders_Options extends tad_DI52_ServiceProvider {
 		$this->container['options.option'] = 'qa-thing';
 
 		$this->container->singleton('qa_Options_RepositoryI', 'qa_Options_Repository');
-		$optionsPage = $this->container->instance('qa_Options_Page', array('options.page-slug', 'qa_Configurations_ScannerI', 'qa_Options_RepositoryI'));
+		$optionsPage = $this->container->instance('qa_Options_Page', array('options.page-slug', 'qa_Configurations_ScannerI'));
 		$this->container->singleton('qa_Options_PageI', $optionsPage);
 
 		add_action('admin_menu', array($this, 'addOptionsPage'));

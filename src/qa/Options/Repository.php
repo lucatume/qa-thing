@@ -10,14 +10,23 @@ class qa_Options_Repository implements qa_Options_RepositoryI, ArrayAccess {
 	 * @var string
 	 */
 	private $optionName;
+	/**
+	 * @var qa_Adapters_WordPressI
+	 */
+	protected $wp;
 
 	/**
 	 * qa_Options_Repository constructor.
 	 *
 	 * @param string $optionName
+	 * @param qa_Adapters_WordPressI $wp
 	 */
-	function __construct($optionName = 'qa-thing') {
+	function __construct($optionName = 'qa-thing', qa_Adapters_WordPressI $wp) {
+		if (!is_string($optionName)) {
+			throw new InvalidArgumentException('Option name must be a string');
+		}
 		$this->optionName = $optionName;
+		$this->wp = $wp;
 		$this->read();
 	}
 
@@ -98,14 +107,15 @@ class qa_Options_Repository implements qa_Options_RepositoryI, ArrayAccess {
 	/**
 	 * Updates the option in the database.
 	 */
-	protected function update() {
-		update_option($this->optionName, $this->option);
+	public function update() {
+		$this->wp->update_option($this->optionName, $this->option);
 	}
 
 	/**
 	 * Reads the option from the database.
 	 */
-	protected function read() {
-		$this->option = get_option($this->optionName, array());
+	public function read() {
+		$read = $this->wp->get_option($this->optionName);
+		$this->option = empty($read) ? array() : $read;
 	}
 }
