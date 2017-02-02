@@ -12,7 +12,8 @@
   "minimum-stability": "stable",
   "autoload": {
     "psr-0": {
-      "qa_": "src/"
+      "qa_": "src/",
+      "Handlebars_": "vendor/handlebars.php-php-52/src"
     }
   },
   "require": {

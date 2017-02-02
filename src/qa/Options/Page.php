@@ -11,24 +11,23 @@ class qa_Options_Page implements qa_Options_PageI {
 	protected $scanner;
 
 	/**
+	 * @var qa_RenderEngines_HandlebarsI
+	 */
+	protected $renderEngine;
+
+	/**
 	 * qa_Options_Page constructor.
 	 * @param $slug
 	 * @param qa_Configurations_ScannerI $scanner
+	 * @param qa_RenderEngines_HandlebarsI $renderEngine
 	 */
-	public function __construct($slug, qa_Configurations_ScannerI $scanner) {
+	public function __construct($slug, qa_Configurations_ScannerI $scanner, qa_RenderEngines_HandlebarsI $renderEngine) {
 		$this->slug = $slug;
 		$this->scanner = $scanner;
+		$this->renderEngine = $renderEngine;
 	}
 
 	public function render() {
-		?>
-        <select name="qa-configuration" id="qa-configuration">
-			<?php /** @var qa_Configurations_ConfigurationI $configuration */
-			foreach ($this->scanner->configurations() as $configuration) : ?>
-                <option value="<?php echo $configuration->id() ?>"
-                        class="qa-configuration-option"><?php echo $configuration->name() ?></option>
-			<?php endforeach; ?>
-        </select>
-		<?php
+	    echo $this->renderEngine->render('options-page',array('configurations'=>$this->scanner->configurations()));
 	}
 }

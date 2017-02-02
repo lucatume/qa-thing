@@ -1,4 +1,6 @@
 vendor
+# pseudo-vendor dependency
+!vendor/handlebars.php-php-52
 node_modules
 
 tests/_output/*
