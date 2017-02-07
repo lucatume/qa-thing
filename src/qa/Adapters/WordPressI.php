@@ -41,4 +41,14 @@ interface qa_Adapters_WordPressI {
 	 */
 	public function update_option($option, $value, $autoload = null);
 
+	/**
+	 * Proxy for the `__` function.
+	 *
+	 * @see __()
+	 *
+	 * @param string $text
+	 * @param string $domain
+	 * @return string
+	 */
+	public function __( $text, $domain = 'default' );
 }

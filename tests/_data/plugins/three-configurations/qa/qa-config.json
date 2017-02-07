@@ -1,0 +1,16 @@
+{
+  "configurations": {
+    "one": {
+      "title": "Example 1",
+      "target": "qa/scripts/example.php"
+    },
+    "two": {
+      "title": "Example 2",
+      "target": "qa/scripts/example.php"
+    },
+    "three": {
+      "title": "Example 3",
+      "target": "qa/scripts/example.php"
+    }
+  }
+}

@@ -56,6 +56,7 @@ class ScannerTest extends \Codeception\Test\Unit {
 	 * it should return no configurations if there are no plugins installed
 	 */
 	public function it_should_return_no_configurations_if_there_are_no_plugins_installed() {
+		$this->options->read()->shouldBeCalled();
 		$this->wp->get_plugins()->willReturn([]);
 
 		$scanner = $this->make_instance();
@@ -68,6 +69,7 @@ class ScannerTest extends \Codeception\Test\Unit {
 	 * it should return no configurations if there is one plugin installed but has no configurations
 	 */
 	public function it_should_return_no_configurations_if_there_is_one_plugin_installed_but_has_no_configurations() {
+		$this->options->read()->shouldBeCalled();
 		$plugins = [
 			'foo/foo.php' => ['Title' => 'foo']
 		];
@@ -89,6 +91,7 @@ class ScannerTest extends \Codeception\Test\Unit {
 	 * it should return one configuration if there is a plugin with a configuration file
 	 */
 	public function it_should_return_one_configuration_if_there_is_a_plugin_with_a_configuration_file() {
+		$this->options->read()->shouldBeCalled();
 		$plugins = [
 			'bar/bar.php' => ['Title' => 'bar']
 		];
@@ -118,6 +121,7 @@ class ScannerTest extends \Codeception\Test\Unit {
 	 */
 	public function it_should_return_one_configuration_if_there_are_two_plugins_but_only_one_has_a_valid_configuration(
 	) {
+		$this->options->read()->shouldBeCalled();
 		$plugins = [
 			'foo/foo.php' => ['Title' => 'foo'],
 			'bar/bar.php' => ['Title' => 'bar']
@@ -162,6 +166,7 @@ class ScannerTest extends \Codeception\Test\Unit {
 	 * @dataProvider invalidConfigurations
 	 */
 	public function it_should_prune_invalid_configurations($invalid) {
+		$this->options->read()->shouldBeCalled();
 		$plugins = [
 			'bar/bar.php' => ['Title' => 'bar']
 		];
@@ -189,6 +194,7 @@ class ScannerTest extends \Codeception\Test\Unit {
 	 */
 	public function it_should_exclude_not_the_plugin_examples_if_option_is_not_set() {
 		$this->options->disableExamples()->willReturn(false);
+		$this->options->read()->shouldBeCalled();
 		$plugins = [
 			'foo/foo.php' => ['Title' => 'foo'],
 			'bar/bar.php' => ['Title' => 'bar'],

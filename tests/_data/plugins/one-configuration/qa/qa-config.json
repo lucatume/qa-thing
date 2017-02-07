@@ -1,0 +1,8 @@
+{
+  "configurations": {
+    "one": {
+      "title": "Example",
+      "target": "qa/scripts/example.php"
+    }
+  }
+}

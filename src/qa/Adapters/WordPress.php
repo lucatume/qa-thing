@@ -55,4 +55,17 @@ class qa_Adapters_WordPress implements qa_Adapters_WordPressI {
 	public function update_option($option, $value, $autoload = null) {
 		return update_option($option, $value, $autoload);
 	}
+
+	/**
+	 * Proxy for the `__` function.
+	 *
+	 * @see __()
+	 *
+	 * @param string $text
+	 * @param string $domain
+	 * @return string
+	 */
+	public function __($text, $domain = 'default') {
+		return __($text, $domain);
+	}
 }

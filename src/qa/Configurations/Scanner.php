@@ -22,6 +22,7 @@ class qa_Configurations_Scanner implements qa_Configurations_ScannerI {
 	 * @return qa_Configurations_ConfigurationI[]
 	 */
 	public function configurations() {
+		$this->options->read();
 		$configurationProviders = $this->scanPlugins();
 
 		if (empty($configurationProviders)) {
@@ -54,7 +55,7 @@ class qa_Configurations_Scanner implements qa_Configurations_ScannerI {
 	protected function addDetails(array &$data, $path) {
 		$data['path'] = $this->wp->plugin_dir($path);
 		$data['root'] = dirname($this->wp->plugin_dir($path));
-		$data['slug'] = isset($data['text-domain']) ? $data['text-domain'] : urlencode($data['Title']);
+		$data['slug'] = isset($data['text-domain']) ? $data['text-domain'] : $this->slugify($data['Title']);
 	}
 
 	protected function hasConfig(array $data) {
@@ -81,5 +82,24 @@ class qa_Configurations_Scanner implements qa_Configurations_ScannerI {
 		}
 
 		return $configurations;
+	}
+
+	protected function slugify($text) {
+		// replace non letter or digits by -
+		$text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+		// trim
+		$text = trim($text, '-');
+		// transliterate
+		if (function_exists('iconv')) {
+			$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+		}
+		// lowercase
+		$text = strtolower($text);
+		// remove unwanted characters
+		$text = preg_replace('~[^-\w]+~', '', $text);
+		if (empty($text)) {
+			return 'n-a';
+		}
+		return $text;
 	}
 }
