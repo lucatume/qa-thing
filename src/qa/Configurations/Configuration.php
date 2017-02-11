@@ -121,4 +121,25 @@ class qa_Configurations_Configuration implements qa_Configurations_Configuration
 	public function offsetUnset($offset) {
 		// nope
 	}
+
+	/**
+	 * Applies this configuration.
+	 *
+	 * @return int The configuration exit status; `0` for success and other values for errors or failures.
+	 */
+	public function apply() {
+		$target = $this->configuration['target'];
+		$path = $target;
+
+		if (!file_exists($path)) {
+			// relative to plugin root folder
+			$path = $this->data['root'] . DIRECTORY_SEPARATOR . trim($path, DIRECTORY_SEPARATOR);
+		}
+
+		if (!file_exists($path)) {
+			return -33;
+		}
+
+		return include $path;
+	}
 }

@@ -24,6 +24,7 @@ class qa_Plugin {
 		$container->register('qa_ServiceProviders_RenderEngine');
 		$container->register('qa_ServiceProviders_Configurations');
 		$container->register('qa_ServiceProviders_Options');
+		$container->register('qa_ServiceProviders_Ajax');
 
 		self::$container = $container;
 	}

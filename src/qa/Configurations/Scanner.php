@@ -11,6 +11,12 @@ class qa_Configurations_Scanner implements qa_Configurations_ScannerI {
 	 */
 	protected $options;
 
+	/**
+	 * The configuration id we're currently looking for; utility prop.
+	 * @var
+	 */
+	protected $_searchingId = false;
+
 	public function __construct(qa_Adapters_WordPressI $wordPress, qa_Options_RepositoryI $options) {
 		$this->wp = $wordPress;
 		$this->options = $options;
@@ -101,5 +107,23 @@ class qa_Configurations_Scanner implements qa_Configurations_ScannerI {
 			return 'n-a';
 		}
 		return $text;
+	}
+
+	/**
+	 * Gets a configuration by its id.
+	 *
+	 * @param string $id
+	 * @return qa_Configurations_ConfigurationI|false Either the configuration object or `false` on failure.
+	 */
+	public function getConfigurationById($id) {
+		$configurations = $this->configurations();
+		$this->_searchingId = $id;
+		$filtered = array_filter($configurations, array($this, 'matchesId'));
+
+		return empty($filtered) ? false : reset($filtered);
+	}
+
+	protected function matchesId(qa_Configurations_ConfigurationI $configuration) {
+		return $configuration->id() === $this->_searchingId;
 	}
 }

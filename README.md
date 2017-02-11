@@ -2,7 +2,7 @@
 
 *WordPress Quality Assurance (QA) setup for the world in developer-friendly way.*
 
-![QA Selection Screen](doc/images/configuration-apply.gif)
+![QA Selection Screen](doc/images/configuration-handle.gif)
 
 ## Installation
 Download the plugin [from GitHub](https://github.com/lucatume/function-mocker/archive/master.zip), unzip it in the WordPress plugins folder and activate it from the plugins administration panel.
@@ -12,7 +12,7 @@ Download the plugin [from GitHub](https://github.com/lucatume/function-mocker/ar
 
 ### For QA People
 Installed WordPress plugins will define (well: the developers will) QA configuration files and scripts that can be applied using the "QA Thind" options page from the WordPress administration area.
-Select a configuration to apply from the available ones and apply it.
+Select a configuration to handle from the available ones and handle it.
 
 ### For developers
 Create a `qa` folder in the plugin root, and add a `qa-config.json` file in it.
@@ -53,7 +53,7 @@ The format of the file is:
 Ideally configuration and scripts should be left out of any real distribution build and used when delivering to the QA team during development only.
 
 ## Configuration scripts
-Configuration scripts will be executed when the user (the QA person probably) will apply the configuration pointing to it and will happen in the context of a WordPress installation AJAX call handling.
+Configuration scripts will be executed when the user (the QA person probably) will handle the configuration pointing to it and will happen in the context of a WordPress installation AJAX call handling.
 Scripts can use any code available in WordPress and will be passed a `$messages` variable to print messages to the work log; see the example script code:
 
 ```php

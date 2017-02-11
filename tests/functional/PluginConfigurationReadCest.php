@@ -3,11 +3,11 @@
 use function tad\WPBrowser\Tests\Support\rrmdir;
 
 class PluginConfigurationReadCest {
+
 	/**
 	 * @var string
 	 */
 	protected $acmePlugin;
-
 	/**
 	 * @var string
 	 */

@@ -1,0 +1,20 @@
+{
+  "configurations": {
+    "success": {
+      "title": "Succes",
+      "target": "qa/scripts/success.php"
+    },
+    "failure": {
+      "title": "Failure",
+      "target": "qa/scripts/failure.php"
+    },
+    "time-out": {
+      "title": "Time Out",
+      "target": "qa/scripts/time-out.php"
+    },
+    "error": {
+      "title": "Error",
+      "target": "qa/scripts/error.php"
+    }
+  }
+}
