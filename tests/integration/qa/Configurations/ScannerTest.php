@@ -113,4 +113,30 @@ class ScannerTest extends TestCase {
 		$this->assertEqualSets($expected, $read);
 	}
 
+	/**
+	 * @test
+	 * it should allow getting a configuration by id
+	 */
+	public function it_should_allow_getting_a_configuration_by_id() {
+		$this->copyDir(codecept_data_dir('plugins/one-configuration'), trailingslashit(WP_PLUGIN_DIR) . 'one');
+
+		$scanner = $this->make_instance();
+
+		$config = $scanner->getConfigurationById('one::one');
+
+		$this->assertNotEmpty($config);
+		$this->assertEquals('Example', $config->name());
+		$this->assertEquals('one::one', $config->id());
+	}
+
+	/**
+	 * @test
+	 * it should return false if trying to get non existing configuration by id
+	 */
+	public function it_should_return_false_if_trying_to_get_non_existing_configuration_by_id() {
+		$scanner = $this->make_instance();
+
+		$this->assertFalse($scanner->getConfigurationById('one::one'));
+	}
+
 }
