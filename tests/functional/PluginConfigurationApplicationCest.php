@@ -72,9 +72,43 @@ class PluginConfigurationApplicationCest {
 		$I->sendAjaxPostRequest('/wp-admin/admin-ajax.php',
 			['action' => 'qa_apply_configuration', 'id' => 'scripts-one::error']);
 
-		$I->seeResponseCodeIs(200);
+		$I->seeResponseCodeIs(500);
 
 		$I->seeOptionInDatabase(['option_name' => 'qa-thing-last-run-status', 'option_value' => 'error']);
+	}
+
+	/**
+	 * @test
+	 * it should return bad request code if trying to apply non existing configuration
+	 */
+	public function it_should_return_bad_request_code_if_trying_to_apply_non_existing_configuration(FunctionalTester $I
+	) {
+		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
+
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('/admin.php?page=qa-options');
+
+		$I->sendAjaxPostRequest('/wp-admin/admin-ajax.php',
+			['action' => 'qa_apply_configuration', 'id' => 'scripts-one::some-config']);
+
+		$I->seeResponseCodeIs(400);
+	}
+
+	/**
+	 * @test
+	 * it should return bad request code if trying id is not specified in the request
+	 */
+	public function it_should_return_bad_request_code_if_trying_id_is_not_specified_in_the_request(FunctionalTester $I
+	) {
+		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
+
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('/admin.php?page=qa-options');
+
+		$I->sendAjaxPostRequest('/wp-admin/admin-ajax.php',
+			['action' => 'qa_apply_configuration']);
+
+		$I->seeResponseCodeIs(400);
 	}
 
 	/**
@@ -82,6 +116,7 @@ class PluginConfigurationApplicationCest {
 	 * it should allow applying a configuration timing out and see the error status
 	 */
 	public function it_should_allow_applying_a_configuration_timing_out_and_see_the_error_status(FunctionalTester $I) {
+		// later
 	}
 
 }

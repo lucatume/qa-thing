@@ -2,39 +2,11 @@
 
 namespace qa\Configurations;
 
+use qa\Integration\TestCase;
 use qa_Configurations_ConfigurationI as Configuration;
 use qa_Configurations_Scanner as Scanner;
-use qa_Plugin as Plugin;
 
-class ScannerTest extends \Codeception\TestCase\WPTestCase {
-
-	/**
-	 * @var \tad_DI52_ContainerInterface
-	 */
-	protected $container;
-
-	public function setUp() {
-		// before
-		parent::setUp();
-
-		// your set up methods here
-		$this->container = Plugin::getContainer();
-	}
-
-	public function tearDown() {
-		// your tear down methods here
-		foreach (['one', 'two', 'three'] as $dir) {
-			$this->rmdir(trailingslashit(WP_PLUGIN_DIR) . $dir);
-		}
-
-		// then
-		parent::tearDown();
-	}
-
-	function rmdir($path) {
-		exec("rm -rf $path");
-	}
-
+class ScannerTest extends TestCase {
 	/**
 	 * @test
 	 * it should be instantiatable
@@ -89,13 +61,6 @@ class ScannerTest extends \Codeception\TestCase\WPTestCase {
 		$this->assertEquals('one::one', $configurations[0]->id());
 	}
 
-	/**
-	 * @param $src
-	 * @param $dest
-	 */
-	protected function copyDir($src, $dest) {
-		exec("cp -r $src $dest");
-	}
 
 	/**
 	 * @test

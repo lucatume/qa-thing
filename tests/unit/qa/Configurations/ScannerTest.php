@@ -228,4 +228,94 @@ class ScannerTest extends \Codeception\Test\Unit {
 		$this->assertNotEmpty($configurations);
 		$this->assertCount(4, $configurations);
 	}
+
+	/**
+	 * @test
+	 * it should allow getting a configuration by id
+	 */
+	public function it_should_allow_getting_a_configuration_by_id() {
+		$fooConfigurations = [
+			'configurations' => [
+				'bar' => [
+					'title' => 'Bar',
+					'target' => 'qa/scripts/bar.php',
+				],
+				'baz' => [
+					'title' => 'Baz',
+					'target' => 'qa/scripts/baz.php',
+				]
+			]
+		];
+
+		$this->options->read()->shouldBeCalled();
+		$plugins = [
+			'foo/foo.php' => ['Title' => 'foo']
+		];
+		$root = vfsStream::setup('plugins', 777, [
+			'foo' => [
+				'foo.php' => '<?php // Silence is golden ?>',
+				'qa' => [
+					'qa-config.json' => json_encode($fooConfigurations)
+				]
+			]
+		]);
+		$this->wp->get_plugins()->willReturn($plugins);
+		$this->wp->plugin_dir(Argument::type('string'))->will(function (array $args) use ($root) {
+			return $root->url() . DIRECTORY_SEPARATOR . $args[0];
+		});
+
+		$scanner = $this->make_instance();
+
+		$barConfig = $scanner->getConfigurationById('foo::bar');
+
+		$this->assertNotEmpty($barConfig);
+		$this->assertEquals('Bar', $barConfig->name());
+		$this->assertEquals('foo::bar', $barConfig->id());
+
+		$bazConfig = $scanner->getConfigurationById('foo::baz');
+
+		$this->assertNotEmpty($bazConfig);
+		$this->assertEquals('Baz', $bazConfig->name());
+		$this->assertEquals('foo::baz', $bazConfig->id());
+	}
+
+	/**
+	 * @test
+	 * it should return false if trying to get non existing configuration by id
+	 */
+	public function it_should_return_false_if_trying_to_get_non_existing_configuration_by_id() {
+		$fooConfigurations = [
+			'configurations' => [
+				'bar' => [
+					'title' => 'Bar',
+					'target' => 'qa/scripts/bar.php',
+				],
+				'baz' => [
+					'title' => 'Baz',
+					'target' => 'qa/scripts/baz.php',
+				]
+			]
+		];
+
+		$this->options->read()->shouldBeCalled();
+		$plugins = [
+			'foo/foo.php' => ['Title' => 'foo']
+		];
+		$root = vfsStream::setup('plugins', 777, [
+			'foo' => [
+				'foo.php' => '<?php // Silence is golden ?>',
+				'qa' => [
+					'qa-config.json' => json_encode($fooConfigurations)
+				]
+			]
+		]);
+		$this->wp->get_plugins()->willReturn($plugins);
+		$this->wp->plugin_dir(Argument::type('string'))->will(function (array $args) use ($root) {
+			return $root->url() . DIRECTORY_SEPARATOR . $args[0];
+		});
+
+		$scanner = $this->make_instance();
+
+		$this->assertFalse($scanner->getConfigurationById('foo::some'));
+	}
 }

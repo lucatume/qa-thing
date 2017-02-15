@@ -50,5 +50,21 @@ interface qa_Adapters_WordPressI {
 	 * @param string $domain
 	 * @return string
 	 */
-	public function __( $text, $domain = 'default' );
+	public function __($text, $domain = 'default');
+
+	/**
+	 * Proxy for the `current_user_can` function.
+	 *
+	 * @see current_user_can()
+	 *
+	 * @param string $capability
+	 * @param int $object_id Optional. ID of the specific object to check against if `$capability` is a "meta" cap.
+	 *                           "Meta" capabilities, e.g. 'edit_post', 'edit_user', etc., are capabilities used
+	 *                           by map_meta_cap() to map to other "primitive" capabilities, e.g. 'edit_posts',
+	 *                           'edit_others_posts', etc. Accessed via func_get_args() and passed to WP_User::has_cap(),
+	 *                           then map_meta_cap().
+	 *
+	 * @return bool
+	 */
+	public function current_user_can($capability);
 }
