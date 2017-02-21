@@ -17,8 +17,8 @@ class qa_Plugin {
 		$container = new tad_DI52_Container();
 
 		$root = dirname(dirname(dirname(__FILE__)));
-		$container['root-file'] = $root . '/qa-thing.php';
-		$container['root-dir'] = $root;
+		$container->setVar('root-file', $root . '/qa-thing.php');
+		$container->setVar('root-dir', $root);
 
 		$container->register('qa_ServiceProviders_Adapters');
 		$container->register('qa_ServiceProviders_RenderEngine');

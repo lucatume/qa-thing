@@ -6,8 +6,8 @@ class qa_ServiceProviders_Options extends tad_DI52_ServiceProvider {
 	 * Binds and sets up implementations.
 	 */
 	public function register() {
-		$this->container['options.page-slug'] = 'qa-options';
-		$this->container['options.option'] = 'qa-thing';
+		$this->container->setVar('options.page-slug', 'qa-options');
+		$this->container->setVar('options.option', 'qa-thing');
 
 		$this->container->singleton('qa_Options_RepositoryI', 'qa_Options_Repository');
 		$optionsPage = $this->container->instance('qa_Options_Page',
@@ -30,7 +30,7 @@ class qa_ServiceProviders_Options extends tad_DI52_ServiceProvider {
 			__('QA Thing', 'qa'),
 			__('QA Thing', 'qa'),
 			'manage_options',
-			$this->container['options.page-slug'],
+			$this->container->getVar('options.page-slug'),
 			$this->container->callback('qa_Options_PageI', 'render')
 		);
 	}

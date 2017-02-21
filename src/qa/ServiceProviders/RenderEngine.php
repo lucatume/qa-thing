@@ -6,8 +6,9 @@ class qa_ServiceProviders_RenderEngine extends tad_DI52_ServiceProvider {
 	 * Binds and sets up implementations.
 	 */
 	public function register() {
-		$this->container['templates-dir'] = $this->container->getVar('root-dir') . '/templates';
-		$this->container['templates-partials-dir'] = $this->container->getVar('root-dir') . '/templates/partials';
+		$this->container->setVar('templates-dir', $this->container->getVar('root-dir') . '/templates');
+		$this->container->setVar('templates-partials-dir',
+			$this->container->getVar('root-dir') . '/templates/partials');
 		$this->container->singleton('qa_RenderEngines_HandlebarsI', $this->container->callback($this, 'buildHandlebars'));
 	}
 
