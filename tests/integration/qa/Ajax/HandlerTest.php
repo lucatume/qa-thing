@@ -3,7 +3,7 @@
 namespace qa\Ajax;
 
 use qa\Integration\TestCase;
-use qa_Ajax_Handler as Handler;
+use qa_Ajax_ConfigurationApplyHandler as Handler;
 use qa_Plugin as Plugin;
 
 class HandlerTest extends TestCase {

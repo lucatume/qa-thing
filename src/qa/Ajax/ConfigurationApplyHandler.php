@@ -1,12 +1,18 @@
 <?php
 
-class qa_Ajax_Handler implements qa_Ajax_HandlerI {
+class qa_Ajax_ConfigurationApplyHandler implements qa_Ajax_HandlerI {
 	/**
 	 * @var qa_Configurations_ScannerI
 	 */
 	protected $scanner;
+
 	/**
-	 * @var qa_Adapters_WordPressI|WP
+	 * @var bool
+	 */
+	protected $_applied = false;
+
+	/**
+	 * @var qa_Adapters_WordPressI
 	 */
 	private $wp;
 
@@ -21,7 +27,7 @@ class qa_Ajax_Handler implements qa_Ajax_HandlerI {
 	}
 
 	/**
-	 * Handles the request to handle a configuration.
+	 * Handles the request to apply a configuration.
 	 *
 	 * @param bool $send Whether the response object should be sent (`true`) or returned (`false`).
 	 *
@@ -38,6 +44,25 @@ class qa_Ajax_Handler implements qa_Ajax_HandlerI {
 				$response->send();
 			}
 			return $response;
+		}
+
+		if (!empty($_POST['time-limit'])) {
+			if (!filter_var($_POST['time-limit'], FILTER_VALIDATE_INT) || intval($_POST['time-limit']) < 1) {
+				$data = $this->wp->__("The 'time-limit' parameter should be a positive number.", 'qa');
+				$response = new qa_Ajax_BadRequestResponse(array('action' => 'apply_configuration', 'data' => $data));
+
+				if ($send) {
+					$response->send();
+				}
+				return $response;
+			}
+
+			$maxTime = max(ini_get('max_execution_time'), 30);
+			$timeLimit = intval($_POST['time-limit']);
+			$timeSoFar = $this->timeSoFar();
+			// let's give the script a 2 seconds margin
+			$newMaxTime = min($maxTime, (float) $timeLimit + $timeSoFar + 2);
+			ini_set('max_execution_time', ceil($newMaxTime));
 		}
 
 		$sanitized = is_string($_POST['id']) ? filter_var($_POST['id'], FILTER_SANITIZE_STRING) : false;
@@ -75,12 +100,18 @@ class qa_Ajax_Handler implements qa_Ajax_HandlerI {
 		}
 
 		try {
+			$this->wp->add_action('shutdown', array($this, 'shutdown'));
+
 			$status = $configuration->apply();
+
+			$this->_applied = true;
 		} catch (Exception $e) {
+			// not really but we are handling it
+			$this->_applied = true;
 			$data = $this->statusToMessage(-1);
 			$response = new qa_Ajax_InternalErrorResponse(array(
 				'action' => 'apply_configuration',
-				'data' => end($data)
+				'data' => end($data),
 			));
 
 			$this->wp->update_option('qa-thing-last-run-status', $this->statusToRunStatus(-1));
@@ -114,14 +145,14 @@ class qa_Ajax_Handler implements qa_Ajax_HandlerI {
 			1 => $this->wp->__('Failure... The configuration was applied correctly but something went wrong.', 'qa'),
 			-1 => $this->wp->__('Error! The configuration generated one or more errors during its application.', 'qa'),
 			-33 => $this->wp->__('Error! The configuration target script cannot be found.', 'qa'),
-			-100 => $this->wp->__('Time out! The configuration target script timed out.', 'qa'),
+			-100 => $this->wp->__('Fatal error! The configuration target script timed out or generated a fatal error.', 'qa'),
 		);
 
 		$unknown = $this->wp->__('The exit status returned by the configuration is not a recognized one.', 'qa');
 
 		return isset($map[$status]) ?
-			array('status' => $status, 'message' => $map[$status])
-			: array('status' => $status, 'message' => $unknown);
+		array('status' => $status, 'message' => $map[$status])
+		: array('status' => $status, 'message' => $unknown);
 	}
 
 	/**
@@ -135,9 +166,29 @@ class qa_Ajax_Handler implements qa_Ajax_HandlerI {
 			1 => 'fail',
 			-1 => 'error',
 			-33 => 'not-found',
-			-100 => 'time-out',
+			-100 => 'fatal-error',
 		);
 
 		return isset($map[$status]) ? $map[$status] : 'unknown';
+	}
+
+	/**
+	 * The time it took to get here in microseconds.
+	 *
+	 * @return int The
+	 */
+	protected function timeSoFar() {
+		return isset($_SERVER['REQUEST_TIME_FLOAT']) ?
+		(microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) :
+		5; // let's assume it took 5 seconds to get here
+	}
+
+	/**
+	 * Handles the case where the script generated a fatal error.
+	 */
+	public function shutdown() {
+		if (!$this->_applied) {
+			$this->wp->update_option('qa-thing-last-run-status', $this->statusToRunStatus(-100));
+		}
 	}
 }

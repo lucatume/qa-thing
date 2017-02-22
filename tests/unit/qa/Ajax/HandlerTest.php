@@ -6,7 +6,7 @@ include_once codecept_data_dir('classes/WP_Ajax_Response.php');
 
 use Prophecy\Argument;
 use qa_Adapters_WordPressI as WP;
-use qa_Ajax_Handler as Handler;
+use qa_Ajax_ConfigurationApplyHandler as Handler;
 use qa_Configurations_ScannerI as Scanner;
 
 class HandlerTest extends \Codeception\Test\Unit {

@@ -50,13 +50,18 @@ class qa_Ajax_Response extends WP_Ajax_Response {
 	 *
 	 * Sets the content type header to text/xml.
 	 */
-	public function send() {
+	public function send($die = true) {
 		header('Content-Type: text/xml; charset=' . get_option('blog_charset'));
 		echo "<?xml version='1.0' encoding='" . get_option('blog_charset') . "' standalone='yes'?><wp_ajax>";
 		foreach ((array)$this->responses as $response) {
 			echo $response;
 		}
 		echo '</wp_ajax>';
+
+		if(!$die){
+			return;
+		}
+
 		if (wp_doing_ajax()) {
 			wp_die(null, null, $this->status);
 		} else {

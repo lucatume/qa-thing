@@ -67,4 +67,18 @@ interface qa_Adapters_WordPressI {
 	 * @return bool
 	 */
 	public function current_user_can($capability);
+
+	/**
+	 * Proxy for the `add_action` function.
+	 *
+	 * @see add_action()
+	 *
+	 * @param $tag
+	 * @param $function_to_add
+	 * @param int $priority
+	 * @param int $accepted_args
+	 *
+	 * @return bool
+	 */
+	public function add_action($tag, $function_to_add, $priority = 10, $accepted_args = 1);
 }

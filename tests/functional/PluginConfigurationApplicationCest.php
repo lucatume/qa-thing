@@ -13,6 +13,8 @@ class PluginConfigurationApplicationCest {
 		$this->pluginDir = $I->getWpRootFolder() . '/wp-content/plugins/acme';
 		rrmdir($this->pluginDir);
 		$I->copyDir(codecept_data_dir('plugins/scripts-one'), $this->pluginDir);
+		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
+
 	}
 
 	public function _after(FunctionalTester $I) {
@@ -25,8 +27,6 @@ class PluginConfigurationApplicationCest {
 	 */
 	public function it_should_allow_applying_a_successful_configuration_and_see_the_success_status(FunctionalTester $I
 	) {
-		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
-
 		$I->loginAsAdmin();
 		$I->amOnAdminPage('/admin.php?page=qa-options');
 
@@ -43,8 +43,6 @@ class PluginConfigurationApplicationCest {
 	 * it should allow applying a failng configuration and see the failure status
 	 */
 	public function it_should_allow_applying_a_failng_configuration_and_see_the_failure_status(FunctionalTester $I) {
-		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
-
 		$I->loginAsAdmin();
 		$I->amOnAdminPage('/admin.php?page=qa-options');
 
@@ -64,8 +62,6 @@ class PluginConfigurationApplicationCest {
 	public function it_should_allow_applying_a_configuration_generating_an_error_and_see_the_error_status(
 		FunctionalTester $I
 	) {
-		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
-
 		$I->loginAsAdmin();
 		$I->amOnAdminPage('/admin.php?page=qa-options');
 
@@ -83,8 +79,6 @@ class PluginConfigurationApplicationCest {
 	 */
 	public function it_should_return_bad_request_code_if_trying_to_apply_non_existing_configuration(FunctionalTester $I
 	) {
-		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
-
 		$I->loginAsAdmin();
 		$I->amOnAdminPage('/admin.php?page=qa-options');
 
@@ -100,8 +94,6 @@ class PluginConfigurationApplicationCest {
 	 */
 	public function it_should_return_bad_request_code_if_trying_id_is_not_specified_in_the_request(FunctionalTester $I
 	) {
-		$I->seeFileFound($this->pluginDir . '/qa/qa-config.json');
-
 		$I->loginAsAdmin();
 		$I->amOnAdminPage('/admin.php?page=qa-options');
 
@@ -116,7 +108,19 @@ class PluginConfigurationApplicationCest {
 	 * it should allow applying a configuration timing out and see the error status
 	 */
 	public function it_should_allow_applying_a_configuration_timing_out_and_see_the_error_status(FunctionalTester $I) {
-		// later
+		$I->loginAsAdmin();
+		$I->amOnAdminPage('/admin.php?page=qa-options');
+
+		$I->sendAjaxPostRequest('/wp-admin/admin-ajax.php',
+			['action' => 'qa_apply_configuration', 'id' => 'scripts-one::time-out', 'time-limit' => 1]);
+
+		$I->seeResponseCodeIs(200);
+
+		$I->seeOptionInDatabase(['option_name' => 'qa-thing-last-run-status', 'option_value' => 'fatal-error']);
+
+		$I->sendAjaxGetRequest('/wp-admin/admin-ajax.php', ['action' => 'qa_get_last_status']);
+
+		$I->seeResponseContains('fatal-error');
 	}
 
 }
